@@ -5,33 +5,31 @@
 1. Clone the repository:
 
    ```bash
-   git clone
+   git clone https://github.com/stikhead/Calendar
    ```
 
 2. Navigate into the project directory:
 
-```
-bash
-cd <project-directory>
-```
+    ```bash
+    cd Calendar
+    ```
 
 3. Install the dependencies:
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
 4. Start the development server:
 
-```
-bash
-npm run dev
-```
+    ```bash
+    npm run dev
+    ```
 
 5. Open your browser and navigate to:
 
-```bash
-http://localhost:3000
-#or
-http://localhost:5173
-```
+    ```bash
+    http://localhost:3000
+        # or
+    http://localhost:5173
+    ```
