@@ -32,7 +32,7 @@ const MONTH_IMAGES = [
 export default function CalendarLayout() {
     const {
         isMounted, currentDate, currentTime, startDate, setHoverDate,
-        clearSelection, prevMonth, nextMonth, notesThisMonth,
+        clearSelection, prevMonth, nextMonth, notesThisMonth
     } = useCalendar();
 
     const currentImageUrl = MONTH_IMAGES[currentDate.getMonth()];
@@ -83,7 +83,7 @@ export default function CalendarLayout() {
                         <p className="text-white text-sm font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                             {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                             {', '}
-                            {currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            {currentTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </p>
                     </div>
                 </div>
