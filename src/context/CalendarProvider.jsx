@@ -8,7 +8,7 @@ export function CalendarProvider({ children }) {
     const [todayTime, setTodayTime] = useState(0);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [currentTime, setCurrentTime] = useState(new Date());
-
+    const [isRangeMode, setIsRangeMode] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [hoverDate, setHoverDate] = useState(null);
@@ -61,9 +61,10 @@ export function CalendarProvider({ children }) {
   
 
     return (
-        <CalendarContext.Provider value={{ isMounted, todayTime, currentTime, currentDate, notesThisMonth,
+        <CalendarContext.Provider value={{ 
+        isMounted, todayTime, currentTime, currentDate, notesThisMonth,
         startDate, setStartDate, endDate, setEndDate, hoverDate, setHoverDate,
-        notesDict, updateNote, clearSelection, nextMonth, prevMonth, toDateKey
+        notesDict, updateNote, clearSelection, nextMonth, prevMonth, toDateKey, isRangeMode, setIsRangeMode
 }}>
             {children}
         </CalendarContext.Provider>

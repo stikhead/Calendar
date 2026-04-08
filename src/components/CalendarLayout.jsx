@@ -10,7 +10,7 @@ const getOppositeRgb = (rgbString) => {
 
     return rgbString
         .split(' ')
-        .map(num => 205 - parseInt(num))
+        .map(num => 100 - parseInt(num))
         .join(' ');
 };
 
@@ -32,7 +32,7 @@ const MONTH_IMAGES = [
 export default function CalendarLayout() {
     const {
         isMounted, currentDate, currentTime, startDate, setHoverDate,
-        clearSelection, prevMonth, nextMonth, notesThisMonth
+        clearSelection, prevMonth, nextMonth, notesThisMonth,
     } = useCalendar();
 
     const currentImageUrl = MONTH_IMAGES[currentDate.getMonth()];
@@ -77,11 +77,13 @@ export default function CalendarLayout() {
 
                 <div className="relative z-10 p-6 lg:p-8 flex justify-between items-start anim-greeting">
                     <div>
-                        <p className="text-[rgb(var(--theme-opposite))] text-xs font-bold tracking-widest uppercase mb-1 drop-shadow-md">
+                        <p className="text-white text-shadow-mist-100 text-xs font-extrabold tracking-widest uppercase mb-1 drop-shadow-md">
                             {getGreeting()}
                         </p>
-                        <p className="text-[rgba(var(--theme-opposite))] text-sm font-medium drop-shadow-md">
+                        <p className="text-white text-sm font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                             {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                            {', '}
+                            {currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </p>
                     </div>
                 </div>
@@ -110,9 +112,11 @@ export default function CalendarLayout() {
             <div className="lg:flex-1 p-6 sm:p-8 flex flex-col border-b lg:border-b-0 lg:border-r border-gray-100">
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-3">
+
                         <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-[rgba(var(--theme-color),0.1)] border border-[rgba(var(--theme-color),0.2)] text-[rgb(var(--theme-color))] shadow-sm">
                             <Sparkles className="h-5 w-5" />
                         </div>
+
                         <div>
                             <h3 className="text-sm font-bold text-[rgba(var(--theme-opposite))] uppercase tracking-wide">
                                 {currentDate.toLocaleString('en-US', { month: 'long' })} Overview
@@ -123,6 +127,8 @@ export default function CalendarLayout() {
                         </div>
                     </div>
 
+
+
                     <div className="flex items-center gap-2 bg-gray-50 rounded-full p-1 border border-gray-100">
                         <button
                             aria-label="Previous Month"
@@ -132,11 +138,13 @@ export default function CalendarLayout() {
                             <ChevronLeft className="h-5 w-5" />
                         </button>
 
+
                         <span
                             className="font-bold text-sm min-w-22.5 text-center text-gray-800 uppercase tracking-wider"
                         >
                             {currentDate.toLocaleString('en-US', { month: 'short', year: 'numeric' })}
                         </span>
+
 
                         <button
                             aria-label="Next Month"
@@ -145,7 +153,10 @@ export default function CalendarLayout() {
                             <ChevronRight className="h-5 w-5" />
                         </button>
 
+
+
                     </div>
+
                 </div>
 
                 <div className="grid grid-cols-7 gap-2 mb-4 text-center">
@@ -159,7 +170,7 @@ export default function CalendarLayout() {
                 </div>
             </div>
 
-            <div className="lg:w-[30%] p-6 sm:p-8 bg-gray-50/50 flex flex-col h-full overflow-y-hidden">
+            <div className="lg:w-[30%] p-6 sm:p-8 bg-gray-50/50 flex flex-col h-100 lg:h-full overflow-hidden shrink-0 border-t lg:border-t-0 border-gray-100">
                 <NotesRender />
             </div>
         </div>

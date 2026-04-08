@@ -1,5 +1,6 @@
 import { StickyNote, AlignLeft, Info, Lock } from 'lucide-react';
 import { useCalendar } from '../context/CalendarContext';
+import RangeToggle from './RangeMode';
 
 const formatDisplayDate = (date) => date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -24,11 +25,17 @@ export default function NotesRender() {
         return dates;
     };
 
+
     if (!startDate && !endDate) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-center p-6 text-gray-400 anim-fade-in">
-                <AlignLeft className="h-12 w-12 mb-4 opacity-20" />
-                <p className="text-sm">Select a date on the calendar to view or add notes.</p>
+            <div className="flex flex-col h-full anim-fade-in">
+                <div className="flex justify-end mb-4">
+                    <RangeToggle />
+                </div>
+                <div className="flex flex-col items-center justify-center grow text-center p-6 text-gray-400">
+                    <AlignLeft className="h-12 w-12 mb-4 opacity-20" />
+                    <p className="text-sm">Select a date on the calendar to view or add notes.</p>
+                </div>
             </div>
         );
     }
@@ -40,7 +47,7 @@ export default function NotesRender() {
 
         return (
             <div className="flex flex-col h-full anim-fade-in">
-                <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+                <div className="flex items-start justify-between mb-4 border-b border-gray-100 pb-4">
                     <div className="flex items-center gap-2 text-gray-800 font-bold">
                         {isPastDate 
                             ? <Lock className="h-4 w-4 text-gray-400" /> 
@@ -50,10 +57,11 @@ export default function NotesRender() {
                             {formatDisplayDate(startDate)}
                         </span>
                     </div>
+                    <RangeToggle />
                 </div>
 
                 {isPastDate ? (
-                    <div className="grow w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 whitespace-pre-wrap overflow-y-auto custom-scrollbar shadow-inner">
+                    <div className="grow w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 whitespace-pre-wrap wrap-break-word overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] shadow-inner">
                         {currentNote}
                     </div>
                 ) : (
@@ -81,17 +89,20 @@ export default function NotesRender() {
 
         return (
             <div className="flex flex-col h-full anim-slide-right">
-                <div className="mb-4 border-b border-gray-100 pb-4">
-                    <h3 className="text-gray-800 font-bold flex items-center gap-2">
-                        <AlignLeft className="h-5 w-5 text-[rgb(var(--theme-color))]" />
-                        Range Overview
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1 font-medium">
-                        {formatDisplayDate(startDate)} — {formatDisplayDate(endDate)}
-                    </p>
+                <div className="flex items-start justify-between mb-4 border-b border-gray-100 pb-4">
+                    <div>
+                        <h3 className="text-gray-800 font-bold flex items-center gap-2">
+                            <AlignLeft className="h-5 w-5 text-[rgb(var(--theme-color))]" />
+                            Range Overview
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-1 font-medium">
+                            {formatDisplayDate(startDate)} — {formatDisplayDate(endDate)}
+                        </p>
+                    </div>
+                    <RangeToggle />
                 </div>
 
-                <div className="grow overflow-y-auto pr-2 space-y-3 scrollbar-hide custom-scrollbar">
+                <div className="grow overflow-y-auto space-y-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {datesWithNotes.length === 0 ? (
                         <div className="flex items-center gap-2 p-4 bg-gray-50 rounded-lg text-gray-500 text-sm anim-fade-in">
                             <Info className="h-4 w-4" />
@@ -102,15 +113,19 @@ export default function NotesRender() {
                             <div
                                 key={toDateKey(date)}
                                 style={{ animationDelay: `${i * 60}ms` }}
-                                className="range-card p-3 bg-white border border-gray-100 shadow-sm rounded-lg relative overflow-hidden"
+                                className="range-card p-3 bg-white border border-gray-100 shadow-sm rounded-lg relative flex flex-col"
                             >
-                                {date.getTime() < todayTime && <Lock className="absolute top-3 right-3 h-3 w-3 text-gray-300" />}
-                                <span className="text-xs font-bold text-[rgb(var(--theme-color))] block mb-1">
+                                {date.getTime() < todayTime && <Lock className="absolute top-3 right-3 h-3 w-3 text-gray-300 shrink-0" />}
+                                
+                                <span className="text-xs font-bold text-[rgb(var(--theme-color))] block mb-2 shrink-0">
                                     {formatDisplayDate(date)}
                                 </span>
-                                <p className="text-sm text-gray-700 whitespace-pre-wrap pr-4">
-                                    {notesDict[toDateKey(date)]}
-                                </p>
+                                
+                                <div className="max-h-32 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                                    <p className="text-sm text-gray-700 whitespace-pre-wrap wrap-break-word">
+                                        {notesDict[toDateKey(date)]}
+                                    </p>
+                                </div>
                             </div>
                         ))
                     )}

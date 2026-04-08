@@ -4,16 +4,16 @@ const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
 const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
 
 export default function CalendarRender() {
-    const {currentDate, notesDict, startDate, endDate, hoverDate, todayTime, setEndDate, setHoverDate, toDateKey, clearSelection, setStartDate } = useCalendar();
+    const { currentDate, notesDict, startDate, endDate, hoverDate, isRangeMode, todayTime, setEndDate, setHoverDate, toDateKey, clearSelection, setStartDate } = useCalendar();
     const currentDateYear = currentDate.getFullYear();
-    const currentDateMonth =  currentDate.getMonth();
+    const currentDateMonth = currentDate.getMonth();
     const daysInMonth = getDaysInMonth(currentDateYear, currentDateMonth);
     const firstDay = getFirstDayOfMonth(currentDateYear, currentDateMonth);
     const days = [];
 
     for (let i = 0; i < firstDay; i++) {
         days.push(
-            <div 
+            <div
                 key={`empty-start-${i}`}
                 className="p-2 min-h-17.5">
             </div>
@@ -41,13 +41,22 @@ export default function CalendarRender() {
             clickedDate.setHours(0, 0, 0, 0);
 
             const clickedTime = clickedDate.getTime();
-
-            if (startDate && endDate && clickedTime === startDate.getTime()) { 
+            if (!isRangeMode) {
+                if (startDate && !endDate && clickedTime === startDate.getTime()) {
+                    clearSelection();
+                } else {
+                    setStartDate(clickedDate);
+                    setEndDate(null);
+                    setHoverDate(null);
+                }
+                return;
+            }
+            if (startDate && endDate && clickedTime === startDate.getTime()) {
                 clearSelection();
                 return;
             }
 
-            if (startDate && endDate && clickedTime >= startDate.getTime() && clickedTime <=endDate.getTime()) { 
+            if (startDate && endDate && clickedTime >= startDate.getTime() && clickedTime <= endDate.getTime()) {
                 clearSelection();
                 setStartDate(clickedDate);
                 setEndDate(null);
@@ -61,17 +70,18 @@ export default function CalendarRender() {
             } else if (startDate && !endDate) {
                 if (clickedTime === startDate.getTime()) {
                     clearSelection();
-                } else if (clickedTime < startDate.getTime()) { 
+                } else if (clickedTime < startDate.getTime()) {
                     clearSelection();
                     setStartDate(clickedDate);
                     setHoverDate(null);
                 } else {
-                    setEndDate(clickedDate); 
+                    setEndDate(clickedDate);
                 }
             }
         };
 
         const handleDateHover = (day) => {
+            if (!isRangeMode) return;
             if (startDate && !endDate) {
                 const hovered = new Date(currentDateYear, currentDateMonth, day);
                 hovered.setHours(0, 0, 0, 0);
@@ -136,7 +146,7 @@ export default function CalendarRender() {
     const remainingCells = 42 - totalCellsUsed;
     for (let i = 0; i < remainingCells; i++) {
         days.push(
-            <div 
+            <div
                 key={`empty-end-${i}`}
                 className="p-2 min-h-17.5">
             </div>);
